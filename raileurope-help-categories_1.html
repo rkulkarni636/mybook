@@ -1,0 +1,966 @@
+<meta charset="utf-8" />
+<title>Help Center Category Map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     DESIGN TOKENS — light palette on :root, dark overrides below.
+     ============================================================ */
+  :root {
+    --bg: #f3f4f7;
+    --surface: #ffffff;
+    --surface-2: #eceef2;
+    --line: #d8dbe2;
+    --ink: #1b2431;
+    --ink-soft: #4c5566;
+    --muted: #737d8c;
+    --accent: #b5591c;       /* signal amber-rust, departure-board warmth */
+    --accent-ink: #ffffff;
+    --accent-soft: #f6e6d8;
+    --rail: #eb0045;         /* Rail Europe magenta, header/panel chrome */
+    --rail-ink: #fff2f5;
+    --focus: #1d3557;
+    --shadow: rgba(27, 36, 49, 0.10);
+    --radius: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12161d;
+      --surface: #1a2029;
+      --surface-2: #212836;
+      --line: #313a49;
+      --ink: #e9edf3;
+      --ink-soft: #c2cadb;
+      --muted: #8b93a3;
+      --accent: #e08a3d;
+      --accent-ink: #1b1206;
+      --accent-soft: #3a2a17;
+      --rail: #eb0045;
+      --rail-ink: #fff2f5;
+      --shadow: rgba(0, 0, 0, 0.45);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #12161d;
+    --surface: #1a2029;
+    --surface-2: #212836;
+    --line: #313a49;
+    --ink: #e9edf3;
+    --ink-soft: #c2cadb;
+    --muted: #8b93a3;
+    --accent: #e08a3d;
+    --accent-ink: #1b1206;
+    --accent-soft: #3a2a17;
+    --rail: #eb0045;
+    --rail-ink: #fff2f5;
+    --shadow: rgba(0, 0, 0, 0.45);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+
+  .board {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 24px 72px;
+  }
+
+  /* ---------- Header: departure-board strip ---------- */
+  header.strip {
+    background: var(--rail);
+    color: var(--rail-ink);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  header.strip .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.72;
+    margin: 0 0 6px;
+  }
+  header.strip h1 {
+    font-family: "Archivo", sans-serif;
+    font-weight: 800;
+    font-size: clamp(24px, 3.4vw, 34px);
+    line-height: 1.08;
+    margin: 0;
+    text-wrap: balance;
+  }
+  header.strip .meta {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    text-align: right;
+    opacity: 0.85;
+    line-height: 1.6;
+  }
+  header.strip .meta strong {
+    font-variant-numeric: tabular-nums;
+    font-size: 15px;
+    display: block;
+  }
+
+  p.lede {
+    color: var(--ink-soft);
+    font-size: 15px;
+    max-width: 66ch;
+    line-height: 1.55;
+    margin: 0 0 26px;
+  }
+  p.lede code {
+    font-family: "IBM Plex Mono", monospace;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+
+  /* ---------- Grid of category tiles ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .tile {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 16px 16px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    font-family: inherit;
+    color: var(--ink);
+  }
+  .tile:hover, .tile:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px -14px var(--shadow);
+    border-color: var(--accent);
+  }
+  .tile .icon-wrap {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 6px 10px var(--shadow));
+    transition: transform 160ms ease;
+  }
+  .tile:hover .icon-wrap { transform: scale(1.06) rotate(-1deg); }
+  .tile .icon-wrap svg { width: 60px; height: 60px; display: block; }
+  .tile h3 {
+    font-family: "Archivo", sans-serif;
+    font-weight: 700;
+    font-size: 15.5px;
+    margin: 0;
+    line-height: 1.25;
+  }
+  .tile .count {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .tile .hint {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 11px;
+    color: var(--muted);
+    opacity: 0;
+    transition: opacity 140ms ease;
+  }
+  .tile:hover .hint, .tile:focus-visible .hint { opacity: 1; }
+
+  .group-label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 30px 2px 10px;
+  }
+  .group-label:first-of-type { margin-top: 4px; }
+
+  /* ---------- Panel (slide-over) ---------- */
+  .scrim {
+    position: fixed; inset: 0;
+    background: rgba(10, 13, 18, 0.42);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+    z-index: 40;
+  }
+  .scrim.open { opacity: 1; pointer-events: auto; }
+
+  .panel {
+    position: fixed;
+    top: 0; right: 0;
+    height: 100%;
+    width: min(440px, 100%);
+    background: var(--surface);
+    border-left: 1px solid var(--line);
+    box-shadow: -18px 0 40px -20px var(--shadow);
+    transform: translateX(100%);
+    transition: transform 220ms ease;
+    z-index: 41;
+    display: flex;
+    flex-direction: column;
+  }
+  .panel.open { transform: translateX(0); }
+
+  .panel-head {
+    padding: 22px 22px 16px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .panel-head .icon-wrap {
+    width: 48px; height: 48px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    flex: none;
+    filter: drop-shadow(0 4px 8px var(--shadow));
+  }
+  .panel-head .icon-wrap svg { width: 48px; height: 48px; display: block; }
+  .panel-head h2 {
+    font-family: "Archivo", sans-serif;
+    font-size: 19px;
+    margin: 0 0 4px;
+  }
+  .panel-head p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .panel-close {
+    margin-left: auto;
+    background: none; border: none; cursor: pointer;
+    color: var(--muted);
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex: none;
+  }
+  .panel-close:hover { background: var(--surface-2); color: var(--ink); }
+
+  .subtabs {
+    display: flex;
+    gap: 6px;
+    padding: 14px 22px 0;
+    flex-wrap: wrap;
+  }
+  .subtab {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .subtab.active {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: var(--accent);
+  }
+
+  .panel-body {
+    padding: 16px 12px 24px;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .article-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .article-row:hover { background: var(--surface-2); }
+  .article-row .num {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: var(--muted);
+    width: 22px;
+    flex: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .article-row .title { font-size: 13.5px; line-height: 1.4; }
+  .article-row .go {
+    margin-left: auto;
+    color: var(--muted);
+    flex: none;
+  }
+  .article-row .go svg { width: 14px; height: 14px; }
+
+  .empty-note {
+    margin: 10px 10px 0;
+    padding: 16px;
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  footer.notes {
+    margin-top: 40px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+  footer.notes strong { color: var(--ink-soft); }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="grad-breaking-news" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff8a65"/><stop offset="1" stop-color="#c0392b"/>
+    </linearGradient>
+    <linearGradient id="grad-special-assistance" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4fd8c4"/><stop offset="1" stop-color="#0b7a68"/>
+    </linearGradient>
+    <linearGradient id="grad-delays-disruptions" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffcb57"/><stop offset="1" stop-color="#b3760a"/>
+    </linearGradient>
+    <linearGradient id="grad-in-station" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6fa3f7"/><stop offset="1" stop-color="#1e4b8f"/>
+    </linearGradient>
+    <linearGradient id="grad-on-board" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9b8cf2"/><stop offset="1" stop-color="#4b3ea8"/>
+    </linearGradient>
+    <linearGradient id="grad-modification" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c88bf0"/><stop offset="1" stop-color="#7c26b0"/>
+    </linearGradient>
+    <linearGradient id="grad-my-account" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4fd0e6"/><stop offset="1" stop-color="#0e7a90"/>
+    </linearGradient>
+    <linearGradient id="grad-refund" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6ee0a8"/><stop offset="1" stop-color="#1f8a5f"/>
+    </linearGradient>
+    <linearGradient id="grad-payment" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f68bc0"/><stop offset="1" stop-color="#b3175f"/>
+    </linearGradient>
+    <linearGradient id="grad-booking-with-rail-europe" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffb15c"/><stop offset="1" stop-color="#c9660a"/>
+    </linearGradient>
+    <linearGradient id="grad-your-ticket" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6bb6ff"/><stop offset="1" stop-color="#1d63c9"/>
+    </linearGradient>
+    <linearGradient id="grad-your-confirmation" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5fe0cd"/><stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+    <linearGradient id="grad-fares" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3cf5c"/><stop offset="1" stop-color="#9c7a0a"/>
+    </linearGradient>
+    <linearGradient id="grad-group-travel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d6a3fb"/><stop offset="1" stop-color="#7e22ce"/>
+    </linearGradient>
+    <linearGradient id="grad-others" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#aab6c6"/><stop offset="1" stop-color="#4c5768"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="board">
+
+  <header class="strip">
+    <div>
+      <p class="eyebrow">Rail Europe &middot; help.raileurope.com</p>
+      <h1>Help Center&nbsp;Category&nbsp;Map</h1>
+    </div>
+    <div class="meta">
+      <strong id="tile-total">–</strong>
+      categories &middot; <span id="article-total">–</span> articles indexed
+    </div>
+  </header>
+
+  <p class="lede">
+    Hover a tile for a quick preview, click to open its article list. <strong>On Board</strong> opens
+    with <strong>Pets / Luggage / Other</strong> sub-tabs. Every article links straight to its live
+    page on help.raileurope.com. To add new articles later, edit the <code>CATEGORIES</code> array
+    near the top of this file&nbsp;&mdash;&nbsp;see the comment block there.
+  </p>
+
+  <div id="grid-root" class="grid"></div>
+
+  <footer class="notes">
+    <p><strong>Editing this page:</strong> open the file in any text editor and find the
+    <code>CATEGORIES</code> array in the &lt;script&gt; block. Each category is
+    <code>{ title, articles: [{ title, url }] }</code> &mdash; add a new object to the <code>articles</code>
+    array to add a page, or a whole new entry to <code>CATEGORIES</code> to add a category. Save and
+    reopen in a browser; no build step needed.</p>
+    <p><strong>Icon artwork:</strong> every tile icon on this page is original vector artwork made for
+    this project &mdash; see <a href="https://claude.ai/code/artifact/3ca26ce5-6877-42b3-a68a-b95333485bac" id="credits-link" target="_blank" rel="noopener">Image Credits &amp; Sources</a>
+    for the full statement.</p>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panel-title">
+  <div class="panel-head">
+    <div class="icon-wrap" id="panel-icon"></div>
+    <div>
+      <h2 id="panel-title">&nbsp;</h2>
+      <p id="panel-sub">&nbsp;</p>
+    </div>
+    <button class="panel-close" id="panel-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="subtabs" id="panel-subtabs"></div>
+  <div class="panel-body" id="panel-body"></div>
+</aside>
+
+<script>
+/* ==================================================================
+   CATEGORIES — the single source of truth for this page.
+
+   Structure:
+     { id, title, blurb, icon: <svg-string>, articles: [{title,url}] }
+   or, for a category with sub-groups (currently just "On Board"):
+     { id, title, blurb, icon, subgroups: [{ key, label, articles }] }
+
+   HOW TO ADD AN ARTICLE:
+     Find the category below and add { title: "...", url: "..." }
+     to its `articles` array (or the right subgroup's `articles`).
+
+   HOW TO ADD A CATEGORY:
+     Copy one of the blocks below, give it a new unique `id`, and
+     insert it into the CATEGORIES array in the position you want
+     it to appear on the grid.
+   ================================================================== */
+
+/* badge(gradId, glyph) wraps a glyph (drawn in a 0..24 box, same as the old
+   line icons) inside a 64x64 rounded-square art tile filled with the
+   matching gradient from the <defs> block near the top of the page. This
+   is the one place that turns a bare glyph into the colourful "icon
+   artwork" used across the grid — see https://claude.ai/code/artifact/3ca26ce5-6877-42b3-a68a-b95333485bac for the statement
+   that this artwork is original, not sourced. */
+function badge(gradId, glyph) {
+  return `<svg viewBox="0 0 64 64">
+    <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#grad-${gradId})"/>
+    <g transform="translate(8,8) scale(2)" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${glyph}</g>
+  </svg>`;
+}
+
+const GLYPHS = {
+  megaphone: '<path d="M3 10v4a1 1 0 0 0 1 1h2l5 4V5L6 9H4a1 1 0 0 0-1 1Z"/><path d="M15 8a4 4 0 0 1 0 8"/><path d="M18 5a8 8 0 0 1 0 14"/>',
+  wheelchair: '<circle cx="16" cy="5" r="1.6" fill="#fff"/><path d="M11 8h3l1 4h4"/><path d="M9 8v6l4 5"/><path d="M6 12a6 6 0 1 0 8.5 7"/>',
+  alert: '<path d="M12 4 3 19h18L12 4Z"/><path d="M12 10v4"/><path d="M12 17h.01"/>',
+  station: '<path d="M3 9 12 4l9 5"/><path d="M4 9v10M20 9v10"/><path d="M8 12v5M12 12v5M16 12v5"/><path d="M3 21h18"/>',
+  train: '<rect x="5" y="4" width="14" height="12" rx="3"/><path d="M5 11h14"/><circle cx="9" cy="19" r="1" fill="#fff"/><circle cx="15" cy="19" r="1" fill="#fff"/><path d="M8 16l-2 3M16 16l2 3"/>',
+  paw: '<ellipse cx="12" cy="16" rx="5" ry="4"/><circle cx="6" cy="9" r="1.6" fill="#fff"/><circle cx="10" cy="6" r="1.6" fill="#fff"/><circle cx="14" cy="6" r="1.6" fill="#fff"/><circle cx="18" cy="9" r="1.6" fill="#fff"/>',
+  suitcase: '<rect x="4" y="8" width="16" height="12" rx="2"/><path d="M9 8V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M4 13h16"/>',
+  dots: '<circle cx="6" cy="12" r="1.4" fill="#fff"/><circle cx="12" cy="12" r="1.4" fill="#fff"/><circle cx="18" cy="12" r="1.4" fill="#fff"/>',
+  edit: '<path d="M4 20h4l11-11-4-4L4 16v4Z"/><path d="M14.5 6.5 18 10"/>',
+  user: '<circle cx="12" cy="8" r="3.4"/><path d="M5 20c1-4 4.5-6 7-6s6 2 7 6"/>',
+  refund: '<path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M3 4v4h4"/><path d="M12 9v3l2 2"/>',
+  card: '<rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M3.5 10h17"/><path d="M7 14.5h4"/>',
+  ticket: '<path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8Z"/><path d="M14 6v12" stroke-dasharray="2 2"/>',
+  qrticket: '<rect x="3" y="5" width="18" height="14" rx="2"/><rect x="6" y="8" width="4" height="4"/><path d="M6 15h1M9 15h1M14 8h4v4h-4zM14 15h1M17 15h1M16.5 16.5v1M18.5 13.5v1"/>',
+  mailcheck: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M4 7l8 6 8-6"/><path d="M16.5 15.5l1.5 1.5 3-3"/>',
+  tag: '<path d="M12 3h5a2 2 0 0 1 2 2v5L10 19l-7-7L12 3Z"/><circle cx="14.5" cy="8.5" r="1.4" fill="#fff"/>',
+  group: '<circle cx="9" cy="8" r="2.6"/><circle cx="17" cy="9" r="2.2"/><path d="M3.5 19c.7-3 3-4.6 5.5-4.6s4.8 1.6 5.5 4.6"/><path d="M14.5 14.6c2 .2 3.6 1.6 4 4.4"/>',
+  box: '<path d="M3.5 8 12 4l8.5 4-8.5 4-8.5-4Z"/><path d="M3.5 8v8L12 20l8.5-4V8"/><path d="M12 12v8"/>',
+};
+
+const ICONS = {
+  megaphone: badge("breaking-news", GLYPHS.megaphone),
+  wheelchair: badge("special-assistance", GLYPHS.wheelchair),
+  alert: badge("delays-disruptions", GLYPHS.alert),
+  station: badge("in-station", GLYPHS.station),
+  train: badge("on-board", GLYPHS.train),
+  paw: badge("on-board", GLYPHS.paw),
+  suitcase: badge("on-board", GLYPHS.suitcase),
+  dots: badge("on-board", GLYPHS.dots),
+  edit: badge("modification", GLYPHS.edit),
+  user: badge("my-account", GLYPHS.user),
+  refund: badge("refund", GLYPHS.refund),
+  card: badge("payment", GLYPHS.card),
+  ticket: badge("booking-with-rail-europe", GLYPHS.ticket),
+  qrticket: badge("your-ticket", GLYPHS.qrticket),
+  mailcheck: badge("your-confirmation", GLYPHS.mailcheck),
+  tag: badge("fares", GLYPHS.tag),
+  group: badge("group-travel", GLYPHS.group),
+  box: badge("others", GLYPHS.box),
+};
+
+const BASE = "https://help.raileurope.com";
+
+const CATEGORIES = [
+  {
+    id: "breaking-news",
+    title: "Breaking News",
+    blurb: "Live service updates & travel alerts",
+    icon: ICONS.megaphone,
+    articles: [
+      { title: "Europe travel conditions updates", url: `${BASE}/article/41896-updates-on-train-services-in-europe` },
+      { title: "Bulletin board", url: `${BASE}/article/43496-bulletin-board` },
+      { title: "Eurostar – Advance passenger information", url: `${BASE}/article/43599-eurostar-advance-passenger-information` },
+      { title: "Where can you travel with the Swiss Half Fare Card?", url: `${BASE}/article/43477-swiss-half-fare-card-area-of-validity` },
+      { title: "Loco2 changes to Rail Europe", url: `${BASE}/article/40822-raileurope-changes-to-rail-europe` },
+      { title: "Rules for entering the UK", url: `${BASE}/article/43569-uk-entry-rules` },
+      { title: "Barcode scan – issue in Dutch stations", url: `${BASE}/article/43549-barcode-scan-issue-in-dutch-stations` },
+      { title: "Update on the Ukraine crisis", url: `${BASE}/article/43475-ukrain-crises-update` },
+      { title: "Travel options for customers affected by the Middle East situation", url: `${BASE}/article/43878-we-re-here-to-help-travel-options-for-customers-affected-by-the-middle-east-situation` },
+    ],
+  },
+  {
+    id: "special-assistance",
+    title: "Special Assistance",
+    blurb: "Accessibility, mobility & travelling with pets or bikes",
+    icon: ICONS.wheelchair,
+    articles: [
+      { title: "Traveling by train with pets", url: `${BASE}/article/41723-taking-pets-on-the-train` },
+      { title: "Contacting Rail Europe", url: `${BASE}/article/41441-how-do-i-contact-raileurope` },
+      { title: "How to take your car by train?", url: `${BASE}/article/40614-can-i-book-my-car-on-the-autotrain` },
+      { title: "Can you bring bikes on trains in Europe and the UK?", url: `${BASE}/article/41750-taking-bikes-on-the-train` },
+      { title: "Station assistance & boarding the train", url: `${BASE}/article/41776-station-assistance-boarding-the-train` },
+      { title: "Wheelchair access: bus and train guidelines", url: `${BASE}/article/41009-wheelchair-travelling-booking` },
+      { title: "Rail Passenger Rights", url: `${BASE}/article/43557-rail-passenger-rights` },
+      { title: "Persons with reduced mobility (PRM)", url: `${BASE}/article/43556-prm` },
+      { title: "German train stations transfers", url: `${BASE}/article/43854-german-train-stations-transfers` },
+      { title: "How to add a BahnCard during ticket booking", url: `${BASE}/article/43868-how-to-add-a-bahncard-during-ticket-booking` },
+      { title: "How do I book a ticket for my pet?", url: `${BASE}/article/43951-how-do-i-book-a-ticket-for-my-pet` },
+    ],
+  },
+  {
+    id: "delays-disruptions",
+    title: "Delays & Disruptions",
+    blurb: "Country-by-country disruption guidance",
+    icon: ICONS.alert,
+    articles: [
+      { title: "Bulletin board", url: `${BASE}/article/43496-bulletin-board` },
+      { title: "Eurostar: delays & disruptions", url: `${BASE}/article/41478-eurostar-delays-disruptions` },
+      { title: "Italy: delays & disruptions", url: `${BASE}/article/41616-italy-delays-disruptions` },
+      { title: "UK: delays & disruptions", url: `${BASE}/article/41676-uk-delays-disruptions` },
+      { title: "France: delays & disruptions", url: `${BASE}/article/41650-france-delays-disruption` },
+      { title: "Germany: delays & disruptions", url: `${BASE}/article/41251-germany-delays-disruptions` },
+      { title: "Belgium: delays & disruptions", url: `${BASE}/article/43746-belgium-delays-disruptions` },
+      { title: "Spain: delays & disruptions", url: `${BASE}/article/41684-spain-delays-disruptions` },
+      { title: "Switzerland: delays & disruptions", url: `${BASE}/article/43470-switzerland-delays-and-disruptions` },
+      { title: "Bus ticket refunds for delays & cancellations", url: `${BASE}/article/41774-submitting-a-claim-for-your-bus-journey` },
+      { title: "Sweden: delay & disruptions", url: `${BASE}/article/43826-sweden-delay-disruptions` },
+      { title: "Denmark: delay & disruptions", url: `${BASE}/article/43825-denmark-delay-disruptions` },
+      { title: "Netherlands: delay & disruptions", url: `${BASE}/article/43824-netherlands-delay-disruptions` },
+      { title: "Austria: delay & disruptions", url: `${BASE}/article/43823-austria-delay-disruptions` },
+      { title: "How to check your train status online", url: `${BASE}/article/41630-traffic-updates` },
+    ],
+  },
+  {
+    id: "in-station",
+    title: "In Station",
+    blurb: "Collecting tickets, station transfers & boarding gates",
+    icon: ICONS.station,
+    articles: [
+      { title: "How to collect UK train tickets purchased online?", url: `${BASE}/article/41597-collecting-uk-train-tickets` },
+      { title: "How to transfer between train stations in London", url: `${BASE}/article/40999-changing-trains-in-london` },
+      { title: "Overview of Europe's rail network maps", url: `${BASE}/article/40703-rail-network-maps` },
+      { title: "Train station interchanges and transfers", url: `${BASE}/article/41257-understanding-interchanges-and-transfers` },
+      { title: "Free transfers from Renfe – Combinado Cercanías", url: `${BASE}/article/41715-free-transfers-from-renfe-combinado-cercanias` },
+      { title: "Transferring between train stations in Lille", url: `${BASE}/article/41430-changing-trains-in-lille` },
+      { title: "How to change train stations in Paris: a step-by-step guide", url: `${BASE}/article/41713-changing-trains-in-paris` },
+      { title: "How to transfer between train stations in Milan", url: `${BASE}/article/41020-changing-trains-in-milan` },
+      { title: "SNCF train ticket collection from self-service machines", url: `${BASE}/article/41273-collecting-french-train-tickets` },
+      { title: "Guide to switch train stations in Barcelona", url: `${BASE}/article/41752-changing-trains-in-barcelona` },
+      { title: "How to reach the Isle of Man with Rail & Sail tickets", url: `${BASE}/article/41695-rail-sail-tickets-douglas-isle-of-man` },
+      { title: "Eurail/Interrail – how to pass station gates & barcode scanning countries", url: `${BASE}/article/43498-eurail-interrail-how-to-pass-station-gates-barcode-scanning-countries` },
+      { title: "What to do if you can't collect your UK train ticket", url: `${BASE}/article/41700-problems-collecting-uk-train-tickets` },
+      { title: "Airport connections", url: `${BASE}/article/43630-airport-connections` },
+      { title: "Eurostar border requirements: EU Entry/Exit System (EES)", url: `${BASE}/article/43843-eurostar-border-requirements-eu-entry-exit-system-ees` },
+      { title: "When should I arrive at the station? Check-in requirements by train operator", url: `${BASE}/article/43942-when-should-i-arrive-at-the-station-check-in-requirements-by-train-operator` },
+      { title: "How to change train stations in Lyon: a step-by-step guide", url: `${BASE}/article/43891-how-to-change-train-stations-in-lyon-a-step-by-step-guide` },
+      { title: "Countrywise boarding information", url: `${BASE}/article/43966-countrywise-boarding-information` },
+    ],
+  },
+  {
+    id: "on-board",
+    title: "On Board",
+    blurb: "Life on the train — pets, luggage & everything else",
+    icon: ICONS.train,
+    subgroups: [
+      {
+        key: "pets",
+        label: "Pets",
+        icon: ICONS.paw,
+        articles: [
+          { title: "Traveling by train with pets", url: `${BASE}/article/41723-taking-pets-on-the-train` },
+          { title: "How do I book a ticket for my pet?", url: `${BASE}/article/43951-how-do-i-book-a-ticket-for-my-pet` },
+        ],
+      },
+      {
+        key: "luggage",
+        label: "Luggage",
+        icon: ICONS.suitcase,
+        articles: [
+          { title: "Train luggage guidelines by country", url: `${BASE}/article/41789-luggage-requirements` },
+          { title: "Renfe luggage policy: size, weight & security rules", url: `${BASE}/article/41724-checking-in-luggage` },
+        ],
+      },
+      {
+        key: "other",
+        label: "Other",
+        icon: ICONS.dots,
+        articles: [
+          { title: "How to read a train seat map?", url: `${BASE}/article/41279-seat-maps` },
+          { title: "Wi-Fi and power outlets on European trains", url: `${BASE}/article/41687-wifi-power-sockets-on-the-train` },
+          { title: "Eurostar food preferences", url: `${BASE}/article/41733-dietary-requests-on-eurostar` },
+          { title: "A guide to France's TGV Duplex double-decker trains", url: `${BASE}/article/41633-double-decker-tgv-duplex-trains` },
+          { title: "How to check what facilities are available on your train", url: `${BASE}/article/43522-quiet-and-phone-zones-within-a-train` },
+          { title: "How to find your train's facilities", url: `${BASE}/article/41744-facilities-on-the-train` },
+          { title: "How to travel Spain by Iryo: a low-cost high-speed train option", url: `${BASE}/article/43628-iryo-spanish-low-cost-highspeed-train` },
+          { title: "Léman Express – routes and train types", url: `${BASE}/article/43604-leman-express-routes-and-train-types` },
+          { title: "Train lost property: lost & found contacts", url: `${BASE}/article/43659-train-lost-property-lost-found-contacts` },
+          { title: "Ticket upgrade policy – Europe by region", url: `${BASE}/article/43924-ticket-upgrade-policy-europe-by-region` },
+          { title: "Can I change my seats?", url: `${BASE}/article/43937-can-i-change-my-seats` },
+          { title: "Food & drink on European trains", url: `${BASE}/article/43894-food-drink-on-european-trains` },
+          { title: "How to find out my train number?", url: `${BASE}/article/43938-how-to-find-out-my-train-number` },
+          { title: "European rail passes and child fare conditions", url: `${BASE}/article/43967-european-rail-passes-and-child-fare-conditions` },
+        ],
+      },
+    ],
+  },
+  {
+    id: "modification",
+    title: "Modification",
+    blurb: "Changing an existing booking",
+    icon: ICONS.edit,
+    articles: [
+      { title: "What to do if you need to change a train or bus ticket", url: `${BASE}/article/41286-exchanging-tickets` },
+      { title: "How to change your seat on a Eurostar train", url: `${BASE}/article/41605-changing-eurostar-seats` },
+      { title: "How to change the name or date of birth on a train ticket", url: `${BASE}/article/40490-change-name-on-my-ticket` },
+      { title: "Can I change my train ticket delivery method?", url: `${BASE}/article/41697-can-i-change-my-ticket-delivery-method` },
+      { title: "How to change UK Advance fare train tickets", url: `${BASE}/article/41754-exchanging-uk-advance-train-tickets` },
+      { title: "Guidance on handling ticket access issues during peak season", url: `${BASE}/article/43946-request-for-guidance-on-handling-ticket-access-issues-during-peak-season` },
+    ],
+  },
+  {
+    id: "my-account",
+    title: "My Account",
+    blurb: "Account access, loyalty & booking lookup",
+    icon: ICONS.user,
+    articles: [
+      { title: "Where is my booking? How to locate a PNR reference", url: `${BASE}/article/41870-why-cant-i-find-my-booking` },
+      { title: "How to create and use your Rail Europe account", url: `${BASE}/article/41674-using-your-raileurope-account` },
+      { title: "How to manage bookings in your account", url: `${BASE}/article/41673-managing-booking-account` },
+      { title: "How to earn and use loyalty points on train bookings", url: `${BASE}/article/41614-how-to-earn-and-use-loyalty-points-on-train-bookings` },
+      { title: "How to close your Rail Europe account", url: `${BASE}/article/41628-cancelling-your-raileurope-account` },
+    ],
+  },
+  {
+    id: "refund",
+    title: "Refund",
+    blurb: "Refunds, claims & compensation",
+    icon: ICONS.refund,
+    articles: [
+      { title: "How to get a refund for a train or bus ticket", url: `${BASE}/article/41738-refunding-your-ticket` },
+      { title: "How to request a refund on non-refundable tickets", url: `${BASE}/article/41659-how-to-request-a-refund-on-non-refundable-tickets` },
+      { title: "What to do if you miss a train connection due to a delay", url: `${BASE}/article/41714-what-to-do-if-you-miss-a-train-connection-due-to-a-delay` },
+      { title: "Claiming compensation for train or bus delays and cancellations", url: `${BASE}/article/41773-claiming-compensation-for-train-or-bus-delays-and-cancellations` },
+      { title: "Requesting a refund for your rail pass", url: `${BASE}/article/41955-requesting-a-refund-for-your-rail-pass` },
+      { title: "Submitting a claim to Eurostar", url: `${BASE}/article/40950-submitting-a-claim-to-eurostar` },
+      { title: "How to submit a claim to Trenitalia", url: `${BASE}/article/41766-submitting-a-claim-to-trenitalia` },
+      { title: "Submitting a claim to ÖBB", url: `${BASE}/article/41728-submitting-a-claim-to-obb` },
+      { title: "How to submit a claim to SNCF (delay / onboard issue)", url: `${BASE}/article/41778-submitting-a-claim-to-sncf` },
+      { title: "Submitting a claim to Italo", url: `${BASE}/article/41767-submitting-a-claim-to-italo` },
+      { title: "How to request a UK train or bus ticket refund", url: `${BASE}/article/43591-how-to-request-a-uk-train-or-bus-ticket-refund` },
+      { title: "Filing a railway service complaint", url: `${BASE}/article/40956-filing-a-complaint` },
+      { title: "How to find out if my ticket is refundable and/or exchangeable", url: `${BASE}/article/43953-how-to-find-out-if-my-ticket-is-refundable-and-or-exchangeable` },
+      { title: "After-sales guide: train delays, cancellations & disruption", url: `${BASE}/article/43963-after-sales-poolicy-guide` },
+      { title: "Train is cancelled and you do not wish to use the ticket anymore", url: `${BASE}/article/43892-train-is-cancelled-and-you-do-not-wish-to-use-the-ticket-anymore` },
+    ],
+  },
+  {
+    id: "payment",
+    title: "Payment",
+    blurb: "Cards, invoices & checkout issues",
+    icon: ICONS.card,
+    articles: [
+      { title: "Which payment options can I use?", url: `${BASE}/article/41479-which-payment-options-can-i-use` },
+      { title: "Can I get a sales invoice for my ticket booking?", url: `${BASE}/article/43944-can-i-get-a-sales-invoice-for-my-ticket-booking` },
+      { title: "Payment taken but booking unsuccessful", url: `${BASE}/article/41339-payment-taken-but-booking-unsuccessful` },
+      { title: "How to view or edit saved card details", url: `${BASE}/article/41312-how-to-view-or-edit-saved-card-details` },
+      { title: "Redeeming your coupon code or gift card", url: `${BASE}/article/43428-redeeming-your-coupon-code-or-giftcard` },
+      { title: "Can I get a tax invoice for my train or bus booking?", url: `${BASE}/article/41664-can-i-get-a-tax-invoice-for-my-train-or-bus-booking` },
+      { title: "Which currency applies at checkout?", url: `${BASE}/article/41668-which-currency-applies-at-checkout` },
+      { title: "Trouble completing payment with 3D secure?", url: `${BASE}/article/41743-trouble-completing-payment-with-3d-secure` },
+      { title: "Checkout error: trouble completing your order", url: `${BASE}/article/41667-checkout-error-trouble-completing-your-order` },
+    ],
+  },
+  {
+    id: "booking-with-rail-europe",
+    title: "Booking with Rail Europe",
+    blurb: "Search, passes & the booking flow",
+    icon: ICONS.ticket,
+    articles: [
+      { title: "Rail Europe Trip Protection", url: `${BASE}/article/43750-rail-europe-trip-protection` },
+      { title: "How to book a Trenitalia Pass?", url: `${BASE}/article/43831-trenitalia-pass` },
+      { title: "How to book seat reservation for Trenitalia Pass", url: `${BASE}/article/43883-how-to-book-seat-reservation-for-trenitalia-pass` },
+      { title: "What ages count as child or youth on trains?", url: `${BASE}/article/40848-what-agescount-as-child-or-youth-on-trains` },
+      { title: "How to know the departure and arrival train station names?", url: `${BASE}/article/43895-how-to-know-the-departure-and-arrival-train-station-names` },
+      { title: "Why isn't my booking being accepted?", url: `${BASE}/article/41266-problems-adding-tickets-to-your-basket` },
+      { title: "Do all trains require seat reservations?", url: `${BASE}/article/41710-do-all-trains-require-seat-reservations` },
+      { title: "Getting started with your Eurail/Interrail mobile pass", url: `${BASE}/article/43899-getting-started-with-your-eurail-mobile-pass` },
+      { title: "Guide to booking a European rail pass", url: `${BASE}/article/43453-guide-to-booking-a-european-rail-pass` },
+      { title: "Modify your journey by choosing a stopover station", url: `${BASE}/article/41604-modify-your-journey-by-choosing-a-stopover-station` },
+      { title: "How to reserve seats with your pass on Rail Europe", url: `${BASE}/article/43612-how-to-reserve-seats-with-your-pass-on-rail-europe` },
+      { title: "How to set up and manage travel booking alerts", url: `${BASE}/article/41696-how-to-setup-and-manage-travel-booking-alerts` },
+      { title: "How to book separate legs of a train journey", url: `${BASE}/article/41683-how-to-book-separate-legs-of-a-train-journey` },
+      { title: "Checking train schedules between two stations", url: `${BASE}/article/40770-checking-train-schedules-between-two-stations` },
+      { title: "Which browsers are supported by Rail Europe?", url: `${BASE}/article/40364-which-browsers-are-supported-by-rail-europe` },
+      { title: "What to do when your train search fails", url: `${BASE}/article/41663-what-to-do-when-your-train-search-fails` },
+      { title: "Can I hold a train ticket before booking?", url: `${BASE}/article/41646-can-i-hold-a-train-ticket-before-booking` },
+      { title: "Searching for trains via the Irun/Hendaye border", url: `${BASE}/article/41712-trains-via-irun-hendaye-border` },
+      { title: "Trenitalia features", url: `${BASE}/article/43501-trenitalia-features` },
+      { title: "French night train (Intercités de nuit)", url: `${BASE}/article/41270-french-night-train` },
+      { title: "Missed your train due to late arrival – what are your options?", url: `${BASE}/article/43906-missed-your-train-due-to-late-arrival-what-are-your-options` },
+      { title: "Gender neutrality on Rail Europe", url: `${BASE}/article/41260-gender-neutrality-on-raileurope` },
+      { title: "How to book a Swiss pass", url: `${BASE}/article/43928-how-to-book-a-swiss-pass` },
+      { title: "Why do I need to provide ID or passport details for Renfe bookings?", url: `${BASE}/article/43950-why-do-i-need-to-provide-id-or-passport-details-for-renfe-bookings` },
+      { title: "Countries not bookable with Rail Europe", url: `${BASE}/article/43882-countries-not-bookable-with-rail-europe` },
+      { title: "Seat reservations for scenic Swiss trains", url: `${BASE}/article/43904-seat-reservations-for-scenic-swiss-trains` },
+      { title: "Booked through a travel agent?", url: `${BASE}/article/43890-booked-through-a-travel-agent` },
+      { title: "Your first train trip in Europe: a beginner's guide", url: `${BASE}/article/43933-your-first-train-trip-in-europe-a-beginner-s-guide` },
+      { title: "Adding your contact number and its importance", url: `${BASE}/article/43954-adding-your-contact-number-and-its-importance` },
+      { title: "Tickets for travel within the city", url: `${BASE}/article/43914-tickets-for-travel-within-the-city` },
+      { title: "European visa information for Rail Europe travelers", url: `${BASE}/article/43940-european-visa-information-for-rail-europe-travelers` },
+      { title: "Italo discounted fares", url: `${BASE}/article/43923-italo-discounted-fares` },
+      { title: "Trenitalia – CartaFRECCIA", url: `${BASE}/article/43476-trenitalia-cartafreccia` },
+      { title: "What is the difference between first class and second class?", url: `${BASE}/article/43945-what-is-the-difference-between-first-class-and-second-class` },
+      // 52 articles live in this category on the site — the set above covers the
+      // most-referenced ones; add the remainder here as you come across them.
+    ],
+  },
+  {
+    id: "your-ticket",
+    title: "Your Ticket",
+    blurb: "Reading, downloading & translating your ticket",
+    icon: ICONS.qrticket,
+    articles: [
+      { title: "How to read a Spanish train ticket", url: `${BASE}/article/41657-how-to-read-a-spanish-train-ticket` },
+      { title: "How to download your print-at-home or mobile ticket", url: `${BASE}/article/43898-how-to-download-your-print-at-home-or-mobile-ticket` },
+      { title: "Ticket formats by train carrier", url: `${BASE}/article/43957-ticket-formats-by-train-carrier` },
+      { title: "My train operator has changed my journey – what should I do?", url: `${BASE}/article/43952-my-train-operator-has-changed-my-journey-what-should-i-do` },
+      { title: "Long names on tickets cut off", url: `${BASE}/article/41649-long-names-on-tickets-cut-off` },
+      { title: "Eurail Consecutive Pass vs. Eurail Flexi Pass: what's the difference?", url: `${BASE}/article/43943-eurail-consecutive-pass-vs-eurail-flexi-pass-what-s-the-difference` },
+      { title: "How to read and understand a German train ticket", url: `${BASE}/article/41258-how-to-read-and-understand-a-german-train-ticket` },
+      { title: "Italian regional train digital tickets & QR codes", url: `${BASE}/article/43563-italian-regional-train-mandatory-check-in` },
+      { title: "How to read a French train ticket", url: `${BASE}/article/41699-how-to-read-a-french-train-ticket` },
+      { title: "ÖBB printing tickets mode", url: `${BASE}/article/43597-obb-printing-tickets-mode` },
+      { title: "ÖBB train ticket translation", url: `${BASE}/article/43474-obb-train-ticket-translation` },
+      { title: "Can I add my train tickets to Apple Wallet?", url: `${BASE}/article/43909-can-i-add-my-train-tickets-to-apple-wallet` },
+      { title: "Eurail & Interrail Pass benefits", url: `${BASE}/article/43908-eurail-interrail-pass-benefits` },
+      { title: "Eurail Rail Planner and Huawei mobile", url: `${BASE}/article/43614-eurail-rail-planner-and-huawei-mobile` },
+      { title: "How to deactivate your Eurail / Interrail mobile pass", url: `${BASE}/article/43903-how-to-deactivate-your-eurail-interrail-mobile-pass` },
+      // 28 articles live in this category on the site — add the remainder here
+      // as you come across them (mobile ticket use, check-in, Eurostar collection, etc.).
+    ],
+  },
+  {
+    id: "your-confirmation",
+    title: "Your Confirmation",
+    blurb: "Booking references & confirmation emails",
+    icon: ICONS.mailcheck,
+    articles: [
+      { title: "Where to find your train booking reference", url: `${BASE}/article/41404-where-to-find-your-train-booking-reference` },
+      { title: "Can I board Eurostar from a different station?", url: `${BASE}/article/41261-can-i-board-eurostar-from-a-different-station` },
+      { title: "Confirmation email not received", url: `${BASE}/article/41647-confirmation-email-not-received` },
+      { title: "Where to locate the terms and conditions", url: `${BASE}/article/43960-where-to-locate-the-terms-and-conditions` },
+    ],
+  },
+  {
+    id: "fares",
+    title: "Fares",
+    blurb: "Fare types, discounts & pass comparisons",
+    icon: ICONS.tag,
+    articles: [
+      { title: "Passenger ages", url: `${BASE}/article/43788-passenger-ages` },
+      { title: "Italo discounted fares", url: `${BASE}/article/43923-italo-discounted-fares` },
+      { title: "German train tickets – ticket types & discounts", url: `${BASE}/article/41661-german-train-tickets` },
+      { title: "Which railcards are accepted on Rail Europe?", url: `${BASE}/article/41615-using-railcards` },
+      { title: "UK train tickets – fare types and discounts", url: `${BASE}/article/43902-uk-train-tickets-fare-types-and-discounts` },
+      { title: "Passholder fares & classes of service", url: `${BASE}/article/43668-passholder-fares-classes-of-service` },
+      { title: "Understanding train ticket types and prices", url: `${BASE}/article/40782-understanding-train-ticket-types-and-prices` },
+      { title: "Spanish train tickets – ticket types & discounts", url: `${BASE}/article/40876-spanish-train-tickets` },
+      { title: "Senior train fares in Europe", url: `${BASE}/article/43897-senior-train-fares-in-europe` },
+      { title: "Italian train tickets – ticket types & discounts", url: `${BASE}/article/40915-italian-train-tickets` },
+      { title: "What's the difference between Eurail and Interrail?", url: `${BASE}/article/43625-do-i-need-an-interrail-or-a-eurail-pass` },
+      { title: "How to file a claim with Renfe", url: `${BASE}/article/41716-submitting-a-claim-to-renfe` },
+      { title: "How to claim for train delays in the UK", url: `${BASE}/article/40961-submitting-claim-uk-train-delay` },
+      { title: "Rail staff travel discounts", url: `${BASE}/article/40646-do-you-sell-fip-or-rail-staff-fares` },
+      { title: "Young persons' discounts & railcards", url: `${BASE}/article/40858-youth-discounts-railcards` },
+    ],
+  },
+  {
+    id: "group-travel",
+    title: "Group Travel",
+    blurb: "10 or more travellers booking together",
+    icon: ICONS.group,
+    articles: [
+      { title: "Rail Group Easy – book your group train travel today", url: `${BASE}/article/43688-rail-group-easy` },
+    ],
+  },
+  {
+    id: "others",
+    title: "Others",
+    blurb: "Anything that doesn't fit the categories above",
+    icon: ICONS.box,
+    articles: [
+      // Intentionally empty for now — every article reviewed so far slotted
+      // into a category above. Drop future uncategorised articles here as
+      // { title: "...", url: "..." }.
+    ],
+  },
+];
+
+/* ================== rendering (no need to edit below) ================== */
+
+const gridRoot = document.getElementById("grid-root");
+const scrim = document.getElementById("scrim");
+const panel = document.getElementById("panel");
+const panelIcon = document.getElementById("panel-icon");
+const panelTitle = document.getElementById("panel-title");
+const panelSub = document.getElementById("panel-sub");
+const panelSubtabs = document.getElementById("panel-subtabs");
+const panelBody = document.getElementById("panel-body");
+const panelClose = document.getElementById("panel-close");
+
+function countOf(cat) {
+  if (cat.subgroups) return cat.subgroups.reduce((n, g) => n + g.articles.length, 0);
+  return cat.articles.length;
+}
+
+function renderGrid() {
+  gridRoot.innerHTML = "";
+  const frag = document.createDocumentFragment();
+  CATEGORIES.forEach((cat) => {
+    const tile = document.createElement("button");
+    tile.className = "tile";
+    tile.type = "button";
+    tile.setAttribute("aria-haspopup", "dialog");
+    const n = countOf(cat);
+    tile.innerHTML = `
+      <span class="hint">open →</span>
+      <span class="icon-wrap">${cat.icon}</span>
+      <h3>${cat.title}</h3>
+      <span class="count">${n} article${n === 1 ? "" : "s"}</span>
+    `;
+    tile.addEventListener("click", () => openPanel(cat));
+    frag.appendChild(tile);
+  });
+  gridRoot.appendChild(frag);
+
+  document.getElementById("tile-total").textContent = CATEGORIES.length;
+  document.getElementById("article-total").textContent =
+    CATEGORIES.reduce((n, c) => n + countOf(c), 0);
+}
+
+function articleRow(a, i) {
+  return `
+    <a class="article-row" href="${a.url}" target="_blank" rel="noopener">
+      <span class="num">${String(i + 1).padStart(2, "0")}</span>
+      <span class="title">${a.title}</span>
+      <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+    </a>`;
+}
+
+function renderArticles(list) {
+  if (!list.length) {
+    panelBody.innerHTML = `<div class="empty-note">No articles here yet. Add them by editing this category's <code>articles</code> array in the file.</div>`;
+    return;
+  }
+  panelBody.innerHTML = list.map(articleRow).join("");
+}
+
+function openPanel(cat) {
+  panelIcon.innerHTML = cat.icon;
+  panelTitle.textContent = cat.title;
+  panelSub.textContent = cat.blurb;
+
+  if (cat.subgroups) {
+    panelSubtabs.innerHTML = "";
+    panelSubtabs.style.display = "flex";
+    let active = cat.subgroups[0].key;
+    const draw = () => {
+      panelSubtabs.querySelectorAll(".subtab").forEach((el) => {
+        el.classList.toggle("active", el.dataset.key === active);
+      });
+      const group = cat.subgroups.find((g) => g.key === active);
+      renderArticles(group.articles);
+    };
+    cat.subgroups.forEach((g) => {
+      const btn = document.createElement("button");
+      btn.className = "subtab";
+      btn.type = "button";
+      btn.dataset.key = g.key;
+      btn.textContent = `${g.label} (${g.articles.length})`;
+      btn.addEventListener("click", () => { active = g.key; draw(); });
+      panelSubtabs.appendChild(btn);
+    });
+    draw();
+  } else {
+    panelSubtabs.style.display = "none";
+    panelSubtabs.innerHTML = "";
+    renderArticles(cat.articles);
+  }
+
+  scrim.classList.add("open");
+  panel.classList.add("open");
+  panelClose.focus();
+}
+
+function closePanel() {
+  scrim.classList.remove("open");
+  panel.classList.remove("open");
+}
+
+panelClose.addEventListener("click", closePanel);
+scrim.addEventListener("click", closePanel);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closePanel();
+});
+
+renderGrid();
+</script>
