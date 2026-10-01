@@ -13,24 +13,17 @@
     --ink: #0b0b0b;
     --border: #e2e0da;
     --sea: #dbe9f2;
-    --west: #2a78d6; --west-hi: #4b93ea;
-    --south: #eb6834; --south-hi: #f5875a;
-    --north: #1baf7a; --north-hi: #37c894;
     --link: #1f66bd;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       color-scheme: dark;
-      --surface: #17171a; --panel: #222226; --ink: #ffffff; --border: #3a3935; --sea: #16324a;
-      --west: #3987e5; --west-hi: #5a9ff0; --south: #d95926; --south-hi: #ea7646;
-      --north: #199e70; --north-hi: #2fbb8a; --link: #7db4f5;
+      --surface: #17171a; --panel: #222226; --ink: #ffffff; --border: #3a3935; --sea: #16324a; --link: #7db4f5;
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --surface: #17171a; --panel: #222226; --ink: #ffffff; --border: #3a3935; --sea: #16324a;
-    --west: #3987e5; --west-hi: #5a9ff0; --south: #d95926; --south-hi: #ea7646;
-    --north: #199e70; --north-hi: #2fbb8a; --link: #7db4f5;
+    --surface: #17171a; --panel: #222226; --ink: #ffffff; --border: #3a3935; --sea: #16324a; --link: #7db4f5;
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--surface); color: var(--ink);
@@ -41,12 +34,8 @@
     border: 1px solid var(--border); border-radius: 12px; }
   path.country { stroke: var(--surface); stroke-width: 0.7px; cursor: pointer;
     transition: transform 160ms ease; }
-  path.r-w { fill: var(--west); } path.r-s { fill: var(--south); } path.r-n { fill: var(--north); }
   path.country:hover, path.country:focus-visible, path.country.active {
     transform: scale(1.045); stroke: var(--ink); stroke-width: 1.6px; outline: none; }
-  path.r-w:hover, path.r-w:focus-visible, path.r-w.active { fill: var(--west-hi); }
-  path.r-s:hover, path.r-s:focus-visible, path.r-s.active { fill: var(--south-hi); }
-  path.r-n:hover, path.r-n:focus-visible, path.r-n.active { fill: var(--north-hi); }
   .labels text { pointer-events: none; font-weight: 600; fill: #fff; stroke: rgba(0,0,0,.45);
     stroke-width: 2.5px; paint-order: stroke; text-anchor: middle; dominant-baseline: middle; }
   .pop { position: absolute; z-index: 5; min-width: 200px; max-width: calc(100% - 12px);
@@ -64,7 +53,7 @@
   .btn-map { position: absolute; top: 14px; left: 14px; z-index: 4; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
   .btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px;
     background: var(--panel); color: var(--ink); border: 1px solid var(--border); text-decoration: none;
-    font-size: 13px; font-weight: 600; --btn-dot: var(--west); }
+    font-size: 13px; font-weight: 600; --btn-dot: #1e6fd9; }
   .btn:hover, .btn:focus-visible { border-color: var(--ink); outline: none; }
   path.country.cc { fill: var(--c); }
   path.country.cc:hover, path.country.cc:focus-visible, path.country.cc.active { fill: var(--h); }
@@ -131,7 +120,7 @@
 </div>
 <script>
 (function () {
-  var LINKS = {"Denmark": [{"name": "DSB", "url": "https://help.raileurope.com/article/44004-dsb-denmark"}], "Ireland": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-ireland"}], "Austria": [{"name": "ÖBB", "url": "https://help.raileurope.com/article/44015-obb"}], "Finland": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-finland"}], "France": [{"name": "SNCF", "url": "https://help.raileurope.com/article/44000-sncf"}], "Germany": [{"name": "Deutsche Bahn", "url": "https://help.raileurope.com/article/44007-deutsche-bahn"}], "Greece": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-greece"}], "Italy": [{"name": "Trenitalia", "url": "https://help.raileurope.com/article/43974-trenitalia"}, {"name": "Italo", "url": "https://help.raileurope.com/article/44011-italo"}], "Belgium": [{"name": "SNCB", "url": "https://help.raileurope.com/article/44001-sncb"}], "Luxembourg": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-luxembourg"}], "Netherlands": [{"name": "NS", "url": "https://help.raileurope.com/article/44014-netherlands"}], "Norway": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-norway"}], "Portugal": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-portugal"}], "Spain": [{"name": "Renfe", "url": "https://help.raileurope.com/article/44017-renfe"}, {"name": "Iryo", "url": "https://help.raileurope.com/article/44010-iryo"}, {"name": "Ouigo", "url": "https://help.raileurope.com/article/44019-ouigo"}], "Sweden": [{"name": "SJ", "url": "https://help.raileurope.com/article/44002-sj-sweden"}], "Switzerland": [{"name": "SBB", "url": "https://help.raileurope.com/article/44003-sbb"}, {"name": "Glacier Express", "url": "https://help.raileurope.com/article/44009-glacier-express"}, {"name": "Bernina Express", "url": "https://help.raileurope.com/article/43995-bernina-express"}], "United Kingdom": [{"name": "National Rail UK", "url": "https://help.raileurope.com/article/44013-national-rail-uk"}, {"name": "Avanti West Coast", "url": "https://help.raileurope.com/article/43986-avanti-west-coast"}, {"name": "Lumo", "url": "https://help.raileurope.com/article/44012-lumo"}], "Czech Republic": [{"name": "RegioJet", "url": "https://help.raileurope.com/article/44018-regiojet"}], "Slovakia": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-slovakia"}], "Poland": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-poland"}], "Slovenia": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-slovenia"}]};
+  var LINKS = {"Denmark": [{"name": "DSB", "url": "https://help.raileurope.com/article/44004-dsb-denmark"}], "Ireland": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-ireland"}], "Austria": [{"name": "ÖBB", "url": "https://help.raileurope.com/article/44015-obb"}], "Finland": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-finland"}], "France": [{"name": "SNCF", "url": "https://help.raileurope.com/article/44000-sncf"}], "Germany": [{"name": "Deutsche Bahn", "url": "https://help.raileurope.com/article/44007-deutsche-bahn"}], "Greece": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-greece"}], "Italy": [{"name": "Trenitalia", "url": "https://help.raileurope.com/article/43974-trenitalia"}, {"name": "Italo", "url": "https://help.raileurope.com/article/44011-italo"}], "Belgium": [{"name": "SNCB", "url": "https://help.raileurope.com/article/44001-sncb"}], "Luxembourg": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-luxembourg"}], "Netherlands": [{"name": "NS", "url": "https://help.raileurope.com/article/44014-netherlands"}], "Norway": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-norway"}], "Portugal": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-portugal"}], "Spain": [{"name": "Renfe", "url": "https://help.raileurope.com/article/44017-renfe"}, {"name": "Iryo", "url": "https://help.raileurope.com/article/44010-iryo"}, {"name": "Ouigo", "url": "https://help.raileurope.com/article/44019-ouigo"}], "Sweden": [{"name": "SJ", "url": "https://help.raileurope.com/article/44002-sj-sweden"}], "Switzerland": [{"name": "SBB", "url": "https://help.raileurope.com/article/44003-sbb"}, {"name": "Glacier Express", "url": "https://help.raileurope.com/article/44009-glacier-express"}], "United Kingdom": [{"name": "National Rail UK", "url": "https://help.raileurope.com/article/44013-national-rail-uk"}, {"name": "Avanti West Coast", "url": "https://help.raileurope.com/article/43986-avanti-west-coast"}, {"name": "Lumo", "url": "https://help.raileurope.com/article/44012-lumo"}], "Czech Republic": [{"name": "RegioJet", "url": "https://help.raileurope.com/article/44018-regiojet"}], "Slovakia": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-slovakia"}], "Poland": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-poland"}], "Slovenia": [{"name": "Rail Europe destination page", "url": "https://www.raileurope.com/en-us/destinations/trains-slovenia"}]};
   var wrap = document.getElementById('wrap');
   var group = document.getElementById('countries');
   var pop = document.getElementById('pop');
